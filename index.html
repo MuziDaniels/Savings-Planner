@@ -605,7 +605,7 @@
                 const details = document.createElement('details');
                 details.className = 'category-group';
                 details.id = `details-${key}`;
-                details.open = openStates[details.id] !== undefined ? openStates[details.id] : true; // Default open
+                details.open = openStates[details.id] !== undefined ? openStates[details.id] : false; // Default closed
                 
                 details.innerHTML = `
                     <summary class="cat-summary">
