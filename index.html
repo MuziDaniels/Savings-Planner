@@ -378,6 +378,11 @@
         };
 
         let budgetData = JSON.parse(localStorage.getItem('savingsPlannerData_v5')) || JSON.parse(JSON.stringify(defaultData));
+        // Migration: clean up specific items that were removed from defaults
+        if (budgetData.transport) budgetData.transport.items = budgetData.transport.items.filter(i => i.id !== 4);
+        if (budgetData.future) budgetData.future.items = budgetData.future.items.filter(i => i.id !== 23);
+        if (budgetData.loans) budgetData.loans.items = budgetData.loans.items.filter(i => i.id !== 33);
+
         // Remove old onceoff data if migrating
         if (budgetData.onceoff) delete budgetData.onceoff;
         // Patch
