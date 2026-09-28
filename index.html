@@ -3,412 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Savings & Finance Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Comprehensive Budget Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --panel-bg: rgba(30, 41, 59, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --income: #10b981;
-            --expense: #ef4444;
+            --bg: #f4f7fb;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --dark-box: #0f172a;
+            --accent-green: #34d399;
         }
 
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-primary);
-            min-height: 100vh;
+            background-color: var(--bg);
+            color: var(--text-main);
         }
 
-        .app-container {
-            max-width: 1400px;
+        .container {
+            max-width: 1300px;
             margin: 0 auto;
             padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeIn 0.8s ease;
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .summary-cards {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 1.25rem;
-            padding: 2rem;
-            min-width: 280px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .card h3 {
-            margin: 0 0 0.75rem 0;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .card p {
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        .card.income p { color: var(--income); }
-        .card.expenses p { color: var(--expense); }
-
-        #planner-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: 1fr 380px;
             gap: 1.5rem;
-            animation: fadeIn 1.2s ease;
+            align-items: start;
         }
 
-        .category-section {
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Header Card */
+        header {
+            grid-column: 1 / -1;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .header-title p {
+            margin: 0.25rem 0 0 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .income-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 1.5rem;
+        }
+
+        .income-box-inner {
             display: flex;
             flex-direction: column;
-            transition: box-shadow 0.2s;
         }
 
-        .category-section:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .income-box label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
-        .category-header {
+        .income-box .val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .income-input {
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            width: 140px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        /* Main Grid (Left side) */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
         }
 
-        .category-header h2 {
+        .card-header h2 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .category-total {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: white;
-            background: rgba(255,255,255,0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 99px;
-        }
-
-        .item-list {
+        /* Items inside card */
+        .items-list {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
-            flex-grow: 1;
+            gap: 1.25rem;
         }
-
-        .item {
+        
+        .item-group-row {
             display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            animation: slideIn 0.3s ease;
+            gap: 0.75rem;
+            align-items: flex-end;
         }
 
-        .item input {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            outline: none;
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .item input[type="text"] {
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
             flex-grow: 1;
         }
-
-        .item input[type="number"] {
-            width: 120px;
+        
+        .input-wrapper label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
-        .item input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            outline: none;
+            font-family: inherit;
+            box-sizing: border-box;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
         }
 
         .delete-btn {
+            color: var(--text-muted);
             background: transparent;
             border: none;
-            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 1.5rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            transition: all 0.2s;
+            padding: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 2px;
         }
 
         .delete-btn:hover {
-            color: white;
-            background: var(--expense);
+            color: var(--danger);
         }
 
         .add-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--border);
-            color: var(--text-secondary);
-            padding: 0.875rem;
-            border-radius: 0.5rem;
+            align-self: flex-start;
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: none;
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 1.25rem;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-left: auto;
         }
-
+        
         .add-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: #fee2e2;
+        }
+
+        /* Calculated Info Box */
+        .info-box {
+            background: var(--primary-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .info-box div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        
+        .info-box span {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .info-box small {
+            font-size: 0.7rem;
+            color: var(--primary);
+            opacity: 0.8;
+        }
+
+        .info-box strong {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        /* Expense Breakdown / Right Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .donut-chart {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(#3b82f6 0% 30%, #8b5cf6 30% 55%, #10b981 55% 70%, #ef4444 70% 75%, #e2e8f0 75% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .donut-inner {
+            width: 170px;
+            height: 170px;
+            background: var(--card-bg);
+            border-radius: 50%;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 2rem;
+        }
+
+        .legend-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .legend-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .legend-value {
+            font-weight: 600;
+        }
+
+        .legend-pct {
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-left: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        /* Summary Dark Box */
+        .summary-box {
+            background: var(--dark-box);
+            border-radius: 12px;
+            padding: 1.5rem;
             color: white;
-            border-color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+        .summary-row strong {
+            font-size: 1.1rem;
+            color: white;
         }
+
+        .summary-row.total-balance {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
+        }
+
+        .summary-row.total-balance strong {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+        }
+
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
+        <!-- Header -->
         <header>
-            <h1>My Savings Planner</h1>
-            <div class="summary-cards">
-                <div class="card income">
-                    <h3>Total Income</h3>
-                    <p id="total-income">0.00</p>
-                </div>
-                <div class="card expenses">
-                    <h3>Total Expenses</h3>
-                    <p id="total-expenses">0.00</p>
-                </div>
-                <div class="card balance">
-                    <h3>Net Savings</h3>
-                    <p id="net-savings">0.00</p>
+            <div class="header-title">
+                <h1>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Comprehensive Budget Dashboard
+                </h1>
+                <p>Plan your vehicle, living, and future expenses</p>
+            </div>
+            <div class="income-box">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12h.01"/></svg>
+                <div class="income-box-inner">
+                    <label>Monthly Income (Take-home)</label>
+                    <div class="val">
+                        R <input type="number" id="global-income" class="income-input" value="35000" onchange="updateTotals()">
+                    </div>
                 </div>
             </div>
         </header>
-        <main id="planner-container">
-            <!-- Dynamically Rendered Categories -->
-        </main>
+
+        <!-- Main Categories -->
+        <div class="categories-grid" id="categories-container">
+            <!-- Categories injected here -->
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
+                    <h2>Expense Breakdown</h2>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="donut-chart" id="donut-chart">
+                        <div class="donut-inner"></div>
+                    </div>
+                </div>
+
+                <div class="legend" id="chart-legend">
+                    <!-- Legend items injected here -->
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Total Outgoing</span>
+                        <strong id="total-outgoing">R 0</strong>
+                    </div>
+                    <div class="summary-row total-balance">
+                        <span>Disposable Balance</span>
+                        <strong id="disposable-balance">R 0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Colors mapping similar to the image
+        const colors = ['#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#06b6d4', '#84cc16', '#64748b', '#d946ef', '#f43f5e', '#14b8a6'];
+
         const defaultData = {
-            income: {
-                icon: "💰", title: "Income", type: "income",
-                items: [{ id: 1, name: "Salary", amount: 0 }, { id: 2, name: "Side Hustle", amount: 0 }]
+            transport: {
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="3" y="11" width="18" height="8" rx="2"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M3 11l2-5h14l2 5"/></svg>`, 
+                title: "Vehicle Finance & Transport", 
+                items: [{ id: 6, name: "Car Payment", amount: 6815 }, { id: 7, name: "Monthly Fuel", amount: 2000 }, { id: 8, name: "Car Insurance", amount: 1500 }]
             },
             housing: {
-                icon: "🏠", title: "Housing & Living", type: "expense",
-                items: [{ id: 3, name: "Rent/Bond", amount: 0 }, { id: 4, name: "Groceries", amount: 0 }, { id: 5, name: "Utilities", amount: 0 }]
-            },
-            transport: {
-                icon: "🚗", title: "Vehicle & Transport", type: "expense",
-                items: [{ id: 6, name: "Car Payment", amount: 0 }, { id: 7, name: "Fuel", amount: 0 }, { id: 8, name: "Insurance", amount: 0 }]
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`, 
+                title: "Housing & Living", 
+                items: [{ id: 3, name: "Rent/Bond", amount: 7500 }, { id: 5, name: "Utilities (Water, Elec)", amount: 1500 }, { id: 4, name: "Groceries", amount: 0 }]
             },
             future: {
-                icon: "📈", title: "Future Planning", type: "expense",
-                items: [{ id: 12, name: "Emergency Fund", amount: 0 }, { id: 13, name: "Investments", amount: 0 }]
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`, 
+                title: "Future Planning", 
+                items: [{ id: 13, name: "Savings & Investments", amount: 2000 }, { id: 12, name: "Emergency Fund", amount: 1000 }, { id: 999, name: "Life Covers & Policies", amount: 800 }]
             },
             loans: {
-                icon: "💳", title: "Loans & Credit", type: "expense",
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`, 
+                title: "Loans & Credit", 
                 items: [{ id: 9, name: "PayJust/PayFlex", amount: 0 }, { id: 10, name: "Credit Card", amount: 0 }, { id: 99, name: "Personal Loan", amount: 0 }]
             },
             bank: {
-                icon: "🏦", title: "Bank Charges", type: "expense",
-                items: [{ id: 11, name: "Monthly Account Fee", amount: 0 }, { id: 111, name: "Transaction Fees", amount: 0 }]
-            },
-            dates: {
-                icon: "🥂", title: "Dates & Entertainment", type: "expense",
-                items: [{ id: 14, name: "Restaurants/Takeaways", amount: 0 }, { id: 15, name: "Movies/Events", amount: 0 }]
-            },
-            traveling: {
-                icon: "✈️", title: "Traveling", type: "expense",
-                items: [{ id: 16, name: "Holiday Fund", amount: 0 }, { id: 161, name: "Flights/Accommodation", amount: 0 }]
-            },
-            family: {
-                icon: "👨‍👩‍👧‍👦", title: "Parents & Family", type: "expense",
-                items: [{ id: 17, name: "Support for Parents", amount: 0 }, { id: 171, name: "Gifts", amount: 0 }]
-            },
-            hobbies: {
-                icon: "🎮", title: "Hobbies", type: "expense",
-                items: [{ id: 18, name: "Subscriptions (Netflix/Spotify)", amount: 0 }, { id: 19, name: "Gaming/Sports Gear", amount: 0 }]
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, 
+                title: "Bank Charges", 
+                items: [{ id: 11, name: "Monthly Account Fee", amount: 0 }]
             },
             health: {
-                icon: "⚕️", title: "Medical Aid & Health", type: "expense",
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`, 
+                title: "Medical Aid & Health", 
                 items: [{ id: 22, name: "Medical Aid", amount: 0 }, { id: 23, name: "Pharmacy/Meds", amount: 0 }]
             },
             clothes: {
-                icon: "👕", title: "Clothes & Apparel", type: "expense",
-                items: [{ id: 20, name: "New Clothes", amount: 0 }, { id: 24, name: "Shoes/Accessories", amount: 0 }]
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#84cc16" stroke-width="2"><path d="M20.38 3.46L16 2a8 8 0 0 0-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>`, 
+                title: "Clothes & Apparel", 
+                items: [{ id: 20, name: "New Clothes", amount: 0 }]
+            },
+            dates: {
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`, 
+                title: "Dates & Entertainment", 
+                items: [{ id: 14, name: "Restaurants/Takeaways", amount: 0 }, { id: 15, name: "Movies/Events", amount: 0 }]
+            },
+            traveling: {
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>`, 
+                title: "Traveling", 
+                items: [{ id: 16, name: "Holiday Fund", amount: 0 }]
+            },
+            family: {
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, 
+                title: "Parents & Family", 
+                items: [{ id: 17, name: "Support for Parents", amount: 0 }]
+            },
+            hobbies: {
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d946ef" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`, 
+                title: "Hobbies", 
+                items: [{ id: 18, name: "Subscriptions", amount: 0 }, { id: 19, name: "Gaming/Sports Gear", amount: 0 }]
             },
             onceoff: {
-                icon: "⚡", title: "Once-Off Expenses", type: "expense",
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, 
+                title: "Once-Off Expenses", 
                 items: [{ id: 25, name: "Unexpected Expense", amount: 0 }]
             },
             misc: {
-                icon: "🛒", title: "Miscellaneous", type: "expense",
-                items: [{ id: 21, name: "Other Unplanned", amount: 0 }]
+                icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, 
+                title: "Extras & Custom Expenses", 
+                items: [{ id: 21, name: "Gym Membership", amount: 500 }]
             }
         };
 
-        // Persistent storage
-        let budgetData = JSON.parse(localStorage.getItem('savingsPlannerData')) || defaultData;
+        let budgetData = JSON.parse(localStorage.getItem('savingsPlannerData_v2')) || defaultData;
         
-        // Merge missing default categories in case users load old cache
         Object.keys(defaultData).forEach(key => {
             if (!budgetData[key]) {
                 budgetData[key] = defaultData[key];
             }
         });
 
-        let nextId = Date.now(); // Ensure unique IDs
+        let nextId = Date.now();
 
-        // Formatter for Currency
-        const currencyFormatter = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' });
+        const formatCurrency = (val) => new Intl.NumberFormat('en-ZA', { maximumFractionDigits: 0 }).format(val).replace(/,/g, ' ');
 
         function updateTotals() {
-            let totalIncome = 0;
+            let totalIncome = parseFloat(document.getElementById('global-income').value) || 0;
             let totalExpenses = 0;
+            
+            let categoryTotals = [];
 
-            Object.values(budgetData).forEach(category => {
-                const catTotal = category.items.reduce((sum, item) => sum + item.amount, 0);
-                if (category.type === 'income') {
-                    totalIncome += catTotal;
-                } else {
-                    totalExpenses += catTotal;
-                }
+            let colorIdx = 0;
+            Object.keys(budgetData).forEach(key => {
+                const cat = budgetData[key];
+                const catTotal = cat.items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+                totalExpenses += catTotal;
                 
-                const safeTitle = category.title.replace(/[^a-zA-Z0-9]/g, '');
-                const catTotalEl = document.getElementById(`total-${safeTitle}`);
-                if(catTotalEl) catTotalEl.textContent = currencyFormatter.format(catTotal);
-            });
+                const catTotalEl = document.getElementById(`total-${key}`);
+                if(catTotalEl) catTotalEl.textContent = `R ${formatCurrency(catTotal)}`;
 
-            document.getElementById('total-income').textContent = currencyFormatter.format(totalIncome);
-            document.getElementById('total-expenses').textContent = currencyFormatter.format(totalExpenses);
+                if(catTotal > 0) {
+                    categoryTotals.push({
+                        title: cat.title,
+                        amount: catTotal,
+                        color: colors[colorIdx % colors.length]
+                    });
+                }
+                colorIdx++;
+            });
             
             const balance = totalIncome - totalExpenses;
-            const balanceEl = document.getElementById('net-savings');
-            balanceEl.textContent = currencyFormatter.format(balance);
             
-            if(balance >= 0) {
-                balanceEl.style.color = 'var(--income)';
-            } else {
-                balanceEl.style.color = 'var(--expense)';
+            document.getElementById('total-outgoing').textContent = `R ${formatCurrency(totalExpenses)}`;
+            document.getElementById('disposable-balance').textContent = `R ${formatCurrency(balance)}`;
+            
+            // Unallocated
+            if(balance > 0) {
+                categoryTotals.push({ title: "Unallocated / Free", amount: balance, color: "#e2e8f0" });
             }
-            
-            localStorage.setItem('savingsPlannerData', JSON.stringify(budgetData));
+
+            renderChart(categoryTotals, totalIncome);
+            localStorage.setItem('savingsPlannerData_v2', JSON.stringify(budgetData));
+        }
+
+        function renderChart(data, totalIncome) {
+            let conicGradient = [];
+            let currentPct = 0;
+            let legendHTML = '';
+
+            const totalAmount = data.reduce((s, d) => s + d.amount, 0) || 1;
+
+            data.forEach(d => {
+                const pct = (d.amount / totalAmount) * 100;
+                conicGradient.push(`${d.color} ${currentPct}% ${currentPct + pct}%`);
+                currentPct += pct;
+                
+                const displayPct = ((d.amount / (totalIncome || 1)) * 100).toFixed(1);
+
+                legendHTML += `
+                    <div class="legend-item">
+                        <div class="legend-label">
+                            <div class="dot" style="background:${d.color}"></div>
+                            ${d.title}
+                        </div>
+                        <div>
+                            <span class="legend-value">R ${formatCurrency(d.amount)}</span>
+                            <span class="legend-pct">(${displayPct}%)</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('donut-chart').style.background = `conic-gradient(${conicGradient.join(', ')})`;
+            document.getElementById('chart-legend').innerHTML = legendHTML;
         }
 
         function renderApp() {
-            const container = document.getElementById('planner-container');
+            const container = document.getElementById('categories-container');
             container.innerHTML = '';
 
             Object.keys(budgetData).forEach(key => {
                 const category = budgetData[key];
                 const section = document.createElement('div');
-                section.className = 'category-section';
+                section.className = 'card';
                 
-                const safeTitle = category.title.replace(/[^a-zA-Z0-9]/g, '');
+                let addBtnHTML = `<button class="add-btn" onclick="addItem('${key}')">+ Add Extra</button>`;
 
                 section.innerHTML = `
-                    <div class="category-header">
+                    <div class="card-header">
                         <h2>${category.icon} ${category.title}</h2>
-                        <span class="category-total" id="total-${safeTitle}">R 0.00</span>
+                        ${key === 'misc' ? addBtnHTML : ''}
                     </div>
-                    <div class="item-list" id="list-${key}"></div>
-                    <button class="add-btn" onclick="addItem('${key}')">+ Add Item</button>
+                    <div class="items-list" id="list-${key}"></div>
+                    ${key === 'transport' ? `
+                        <div class="info-box">
+                            <div>
+                                <span>Calculated Loan Installment</span>
+                                <small>Excludes fuel & insurance</small>
+                            </div>
+                            <strong id="total-${key}">R 0</strong>
+                        </div>
+                    ` : ''}
                 `;
                 
                 container.appendChild(section);
                 
                 const listEl = document.getElementById(`list-${key}`);
-                category.items.forEach(item => {
-                    listEl.appendChild(createItemEl(key, item));
-                });
+                
+                // Group items by pairs to mimic the two-column grid inside cards
+                for (let i = 0; i < category.items.length; i += 2) {
+                    const row = document.createElement('div');
+                    row.className = 'item-group-row';
+                    
+                    row.appendChild(createItemEl(key, category.items[i]));
+                    
+                    if(category.items[i+1]) {
+                        row.appendChild(createItemEl(key, category.items[i+1]));
+                    }
+                    
+                    listEl.appendChild(row);
+                }
+                
+                if(key !== 'misc' && key !== 'transport') {
+                   const btn = document.createElement('button');
+                   btn.className = "add-btn";
+                   btn.style.marginTop = "0.5rem";
+                   btn.style.background = "transparent";
+                   btn.style.color = "var(--text-muted)";
+                   btn.style.border = "1px dashed var(--border)";
+                   btn.innerHTML = "+ Add Field";
+                   btn.onclick = () => addItem(key);
+                   listEl.appendChild(btn);
+                }
             });
 
             updateTotals();
         }
 
         function createItemEl(catKey, item) {
-            const div = document.createElement('div');
-            div.className = 'item';
-            div.innerHTML = `
-                <input type="text" value="${item.name}" onchange="updateItemName('${catKey}', ${item.id}, this.value)" placeholder="Item Name">
-                <input type="number" value="${item.amount || ''}" onchange="updateItemAmount('${catKey}', ${item.id}, this.value)" placeholder="0.00" min="0" step="0.01">
-                <button class="delete-btn" onclick="deleteItem('${catKey}', ${item.id})" title="Remove item">×</button>
+            const wrapper = document.createElement('div');
+            wrapper.className = 'input-wrapper';
+            wrapper.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label>${item.name}</label>
+                    <button class="delete-btn" onclick="deleteItem('${catKey}', ${item.id})" title="Delete">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+                <div style="position:relative; display:flex; align-items:center;">
+                    ${catKey === 'misc' ? `<input type="text" value="${item.name}" onchange="updateItemName('${catKey}', ${item.id}, this.value)" style="flex:2; border-right:none; border-radius: 6px 0 0 6px;" placeholder="Name">` : ''}
+                    <span style="position:absolute; left:${catKey === 'misc' ? '65%' : '0.75rem'}; color:var(--text-muted); font-size:0.9rem;"></span>
+                    <input type="number" value="${item.amount || ''}" onchange="updateItemAmount('${catKey}', ${item.id}, this.value)" style="padding-left:0.75rem; ${catKey === 'misc' ? 'flex:1; border-radius: 0 6px 6px 0;' : ''}" placeholder="0">
+                </div>
             `;
-            return div;
+            return wrapper;
         }
 
         window.updateItemName = function(catKey, id, newName) {
             const item = budgetData[catKey].items.find(i => i.id === id);
             if(item) item.name = newName;
-            localStorage.setItem('savingsPlannerData', JSON.stringify(budgetData));
+            localStorage.setItem('savingsPlannerData_v2', JSON.stringify(budgetData));
         };
 
         window.updateItemAmount = function(catKey, id, newAmount) {
@@ -418,7 +682,7 @@
         };
 
         window.addItem = function(catKey) {
-            budgetData[catKey].items.push({ id: nextId++, name: '', amount: 0 });
+            budgetData[catKey].items.push({ id: nextId++, name: 'New Item', amount: 0 });
             renderApp();
         };
 
@@ -427,7 +691,7 @@
             renderApp();
         };
 
-        // Initialize App
+        // Init
         renderApp();
     </script>
 </body>
