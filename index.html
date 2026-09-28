@@ -225,18 +225,22 @@
         
         <!-- Header -->
         <div class="header-card">
-            <div class="header-top">
-                <div>
+            <div class="header-top" style="display: flex; gap: 1.5rem; justify-content: space-between; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 140px;">
                     <div class="h-subtitle">Take-Home Cashflow</div>
-                    <div class="h-desc">Monthly net income in ZAR</div>
+                    <div class="h-desc">Monthly net income</div>
                     <div class="h-income-area">
                         <span class="h-currency">R</span>
-                        <input type="number" id="global-income" class="h-income-input" value="35000" oninput="updateTotals()">
+                        <input type="number" id="global-income" class="h-income-input" value="0" oninput="updateTotals()">
                     </div>
                 </div>
-                <div class="h-goal-pill">
-                    <span>🎯 Target R</span>
-                    <input type="number" id="global-goal" value="5000" oninput="updateTotals()">
+                <div style="flex: 1; min-width: 140px;">
+                    <div class="h-subtitle">Savings Goal</div>
+                    <div class="h-desc">Monthly target</div>
+                    <div class="h-income-area">
+                        <span class="h-currency" style="color: #ea580c;">R</span>
+                        <input type="number" id="global-goal" class="h-income-input" value="0" style="color: #ea580c;" oninput="updateTotals()">
+                    </div>
                 </div>
             </div>
             
@@ -440,7 +444,11 @@
         let undoTimer = null;
 
         const fmt = (v) => 'R ' + new Intl.NumberFormat('en-ZA', { maximumFractionDigits: 0 }).format(v).replace(/,/g, ' ');
-        function saveData() { localStorage.setItem('savingsPlannerData_v6', JSON.stringify(budgetData)); }
+        function saveData() { 
+            localStorage.setItem('savingsPlannerData_v6', JSON.stringify(budgetData)); 
+            localStorage.setItem('globalIncome', document.getElementById('global-income').value);
+            localStorage.setItem('globalGoal', document.getElementById('global-goal').value);
+        }
         function saveNotes() { localStorage.setItem('budgetNotes', document.getElementById('budget-notes').value); }
 
         function updateTotals() {
@@ -527,6 +535,9 @@
         }
 
         function renderApp() {
+            document.getElementById('global-income').value = localStorage.getItem('globalIncome') || 35000;
+            document.getElementById('global-goal').value = localStorage.getItem('globalGoal') || 5000;
+            
             const container = document.getElementById('categories-container');
             container.innerHTML = '';
             Object.keys(budgetData).forEach(key => {
@@ -634,10 +645,10 @@
 
         window.resetApp = function() {
             if (!confirm('Are you sure you want to clear ALL data and reset everything to zero? This cannot be undone.')) return;
-            ['savingsPlannerData_v6','savingsPlannerData_v5','savingsPlannerData_v4','savingsPlannerData_v3','savingsPlannerData_v2','budgetNotes'].forEach(k => localStorage.removeItem(k));
+            ['savingsPlannerData_v6','savingsPlannerData_v5','savingsPlannerData_v4','savingsPlannerData_v3','savingsPlannerData_v2','budgetNotes', 'globalIncome', 'globalGoal'].forEach(k => localStorage.removeItem(k));
             budgetData = JSON.parse(JSON.stringify(defaultData));
             document.getElementById('global-income').value = 0;
-            document.getElementById('global-goal').value = 5000;
+            document.getElementById('global-goal').value = 0;
             renderApp();
         };
 
