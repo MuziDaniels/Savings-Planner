@@ -524,11 +524,11 @@
             
             const tipEl = document.getElementById('main-tip');
             if (balance < 0) {
-                tipEl.innerHTML = `<span style="font-size:16px;">⚠️</span> Over budget by <strong style="color:var(--danger)">${fmt(Math.abs(balance))}</strong>. Review variable expenses.`;
+                tipEl.innerHTML = `Over budget by <strong style="color:var(--danger)">${fmt(Math.abs(balance))}</strong>. Review variable expenses.`;
             } else if (savingsTotal < goal) {
-                tipEl.innerHTML = `<span style="font-size:16px;">💡</span> You are <strong>${fmt(goal - savingsTotal)}</strong> away from your savings goal.`;
+                tipEl.innerHTML = `You are <strong>${fmt(goal - savingsTotal)}</strong> away from your savings goal.`;
             } else {
-                tipEl.innerHTML = `<span style="font-size:16px;">🌟</span> Fantastic! You are meeting your savings target.`;
+                tipEl.innerHTML = `Fantastic! You are meeting your savings target.`;
             }
             
             saveData();
@@ -588,7 +588,7 @@
             
             row.innerHTML = `
                 <div class="item-row">
-                    <input class="item-name-input" type="text" value="${item.name}" placeholder="Expense name" onchange="updateItemName('${catKey}', ${item.id}, this.value)">
+                    <input class="item-name-input" type="text" value="${item.name}" placeholder="New Item" onchange="updateItemName('${catKey}', ${item.id}, this.value)">
                     ${typeSelect}
                 </div>
                 <div class="item-row" style="margin-top: 0.2rem;">
@@ -615,7 +615,7 @@
             if (item) item.amount = parseFloat(v) || 0; updateTotals();
         };
         window.addItem = function(catKey) {
-            budgetData[catKey].items.push({ id: nextId++, name: 'New Item', amount: 0, costType: 'variable' });
+            budgetData[catKey].items.push({ id: nextId++, name: '', amount: 0, costType: 'variable' });
             renderApp();
         };
         window.deleteItem = function(catKey, id) {
@@ -692,7 +692,7 @@
                 doc.autoTable({
                     startY, margin: { left: margin, right: margin },
                     head: [[{ content: cat.title, colSpan: 2, styles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold', fontSize: 9 } }, { content: fmt(catTotal), styles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold', fontSize: 9, halign: 'right' } }]],
-                    body: activeItems.map(item => [item.name, item.costType === 'fixed' ? 'Fixed' : 'Variable', fmt(parseFloat(item.amount) || 0)]),
+                    body: activeItems.map(item => [item.name || 'New Item', item.costType === 'fixed' ? 'Fixed' : 'Variable', fmt(parseFloat(item.amount) || 0)]),
                     columnStyles: { 0: { cellWidth: 'auto', fontSize: 8.5 }, 1: { cellWidth: 28, fontSize: 7.5, textColor: [100, 116, 139], fontStyle: 'italic' }, 2: { cellWidth: 35, halign: 'right', fontSize: 8.5, fontStyle: 'bold' } },
                     styles: { lineColor: [226, 232, 240], lineWidth: 0.2, cellPadding: 3, font: 'helvetica' },
                     headStyles: { lineWidth: 0 }, alternateRowStyles: { fillColor: [248, 250, 252] }, theme: 'grid'
