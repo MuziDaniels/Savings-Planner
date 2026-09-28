@@ -253,7 +253,7 @@
             <div>
                 <h1 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                    Comprehensive Budget Dashboard
+                    Comprehensive Budget
                 </h1>
                 <p style="margin: 0.3rem 0 0; font-size: 0.85rem; color: var(--text-muted);">Plan your vehicle, living, and future expenses</p>
             </div>
@@ -266,7 +266,7 @@
         <div class="header-card">
             <div class="header-top" style="display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 110px;">
-                    <div class="h-subtitle">Take-Home Cashflow</div>
+                    <div class="h-subtitle">Monthly Take Home</div>
                     <div class="h-desc">Monthly net income</div>
                     <div class="h-income-area">
                         <span class="h-currency">R</span>
@@ -679,7 +679,7 @@
         }
 
         window.updateItemType = function(catKey, id, v) {
-            const item = budgetData[catKey].items.find(i => i.id === id);
+            const item = budgetData[catKey].items.find(i => i.id === id); 
             if (item) item.costType = v; updateTotals();
         };
         window.updateItemName = function(catKey, id, v) {
