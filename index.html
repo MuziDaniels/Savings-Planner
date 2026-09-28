@@ -63,8 +63,8 @@
         .h-income-area { margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
         .h-currency { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
         .h-income-input {
-            border: none; background: transparent; font-size: 1.6rem; font-weight: 800;
-            color: var(--text-main); outline: none; font-family: inherit; width: 140px;
+            border: none; background: transparent; font-size: 1.5rem; font-weight: 800;
+            color: var(--text-main); outline: none; font-family: inherit; width: 100%; max-width: 110px;
         }
         .h-goal-pill {
             background: #fff7ed; border: 1px solid #ffedd5; padding: 0.4rem 0.6rem;
@@ -264,8 +264,8 @@
 
         <!-- Header -->
         <div class="header-card">
-            <div class="header-top" style="display: flex; gap: 1.5rem; justify-content: space-between; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 140px;">
+            <div class="header-top" style="display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 110px;">
                     <div class="h-subtitle">Take-Home Cashflow</div>
                     <div class="h-desc">Monthly net income</div>
                     <div class="h-income-area">
@@ -273,7 +273,15 @@
                         <input type="number" id="global-income" class="h-income-input" value="0" oninput="updateTotals()">
                     </div>
                 </div>
-                <div style="flex: 1; min-width: 140px;">
+                <div style="flex: 1; min-width: 110px;">
+                    <div class="h-subtitle">Other Income</div>
+                    <div class="h-desc">Side hustles, etc.</div>
+                    <div class="h-income-area">
+                        <span class="h-currency">R</span>
+                        <input type="number" id="global-other-income" class="h-income-input" value="0" oninput="updateTotals()">
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 110px;">
                     <div class="h-subtitle">Savings Goal</div>
                     <div class="h-desc">Monthly target</div>
                     <div class="h-income-area">
@@ -487,13 +495,16 @@
         function saveData() { 
             localStorage.setItem('savingsPlannerData_v6', JSON.stringify(budgetData)); 
             localStorage.setItem('globalIncome', document.getElementById('global-income').value);
+            localStorage.setItem('globalOtherIncome', document.getElementById('global-other-income').value);
             localStorage.setItem('globalGoal', document.getElementById('global-goal').value);
         }
         function saveNotes() { localStorage.setItem('budgetNotes', document.getElementById('budget-notes').value); }
 
         function updateTotals() {
             const income = parseFloat(document.getElementById('global-income').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('global-other-income').value) || 0;
             const goal = parseFloat(document.getElementById('global-goal').value) || 0;
+            const totalNetIncome = income + otherIncome;
             
             let totalExp = 0, totalFixed = 0, totalVariable = 0, savingsTotal = 0;
             
@@ -519,11 +530,11 @@
                 if (countEl) countEl.textContent = `${activeCount} active item${activeCount===1?'':'s'}`;
             });
             
-            const balance = income - totalExp;
+            const balance = totalNetIncome - totalExp;
             
             // Top Metrics
             document.getElementById('m-disposable').textContent = fmt(balance);
-            document.getElementById('m-left-pct').textContent = income > 0 ? ((balance / income) * 100).toFixed(1) + '% left' : '0% left';
+            document.getElementById('m-left-pct').textContent = totalNetIncome > 0 ? ((balance / totalNetIncome) * 100).toFixed(1) + '% left' : '0% left';
             document.getElementById('m-outgoing').textContent = fmt(totalExp);
             document.getElementById('m-goal-show').textContent = fmt(goal);
             
@@ -551,7 +562,7 @@
             // Health Score
             let score = 50;
             if (savingsTotal >= goal && goal > 0) score += 30; else if (savingsTotal > 0) score += 15;
-            if (totalExp <= income * 0.85) score += 20; else if (totalExp > income) score -= 30;
+            if (totalExp <= totalNetIncome * 0.85) score += 20; else if (totalExp > totalNetIncome) score -= 30;
             score = Math.max(0, Math.min(100, score));
             
             document.getElementById('score-val').textContent = score;
@@ -586,6 +597,7 @@
 
         function renderApp() {
             document.getElementById('global-income').value = localStorage.getItem('globalIncome') || 35000;
+            document.getElementById('global-other-income').value = localStorage.getItem('globalOtherIncome') || 0;
             document.getElementById('global-goal').value = localStorage.getItem('globalGoal') || 5000;
             
             // Restore theme on first render if not set
@@ -772,6 +784,17 @@
                 const split = doc.splitTextToSize(notes, pageW - margin * 2); doc.text(split, margin, startY);
             }
             doc.save('Budget_Report_' + new Date().toISOString().slice(0, 10) + '.pdf');
+        };
+
+        window.resetApp = function() {
+            if (confirm("Are you sure you want to clear ALL budget data? This cannot be undone.")) {
+                localStorage.removeItem('savingsPlannerData_v6');
+                localStorage.removeItem('globalIncome');
+                localStorage.removeItem('globalOtherIncome');
+                localStorage.removeItem('globalGoal');
+                localStorage.removeItem('budgetNotes');
+                location.reload();
+            }
         };
 
         renderApp();
